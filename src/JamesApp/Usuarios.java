@@ -11,4 +11,11 @@ package JamesApp;
  */
 public class Usuarios {
     
+    String Username;
+    String password;
+    String nombre;
+    int edad;
+    boolean tipo;
+    
+    
 }
