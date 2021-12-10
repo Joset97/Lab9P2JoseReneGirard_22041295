@@ -55,6 +55,8 @@ public class LoginYRegister extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         PasswordtxtRegister = new javax.swing.JTextField();
         BotonREgistrarseRegistrar = new javax.swing.JButton();
+        FrameAdmin = new javax.swing.JFrame();
+        jFrame1 = new javax.swing.JFrame();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -185,6 +187,28 @@ public class LoginYRegister extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
+        javax.swing.GroupLayout FrameAdminLayout = new javax.swing.GroupLayout(FrameAdmin.getContentPane());
+        FrameAdmin.getContentPane().setLayout(FrameAdminLayout);
+        FrameAdminLayout.setHorizontalGroup(
+            FrameAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        FrameAdminLayout.setVerticalGroup(
+            FrameAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 255));
@@ -294,7 +318,7 @@ public class LoginYRegister extends javax.swing.JFrame {
 
         String username = TextoUsername.getText();
         String pass = TextoPassWord.getText();
-        int dinero;
+       
 
 
         for (Usuarios u : adminU.getListaU()) {
@@ -302,18 +326,8 @@ public class LoginYRegister extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario encontrado");
 
                 if (u instanceof Compradores) {
-                    ing.add(u);
-                    Ingreso.setListaU(ing);
-                    try {
-                        Ingreso.escribirArchivo();
-                    } catch (IOException ex) {
-                        Logger.getLogger(LoginYRegister.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    CompradorGui Cg = new CompradorGui();
-                    Cg.pack();// aparece con el tamano de los botones
-                    Cg.setLocationRelativeTo(this);//es para centrar la ventana emergente con la anterior
-                    Cg.setVisible(true);
-                    ((Compradores) u).setCantidadDinero(dinero);
+       
+              
                 }
 
                 if (u instanceof Admin) {
@@ -352,64 +366,13 @@ public class LoginYRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_NombreTxtModificarAdminActionPerformed
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        File acce = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-            acce = new File("./Accesorios.txt");
-            fw = new FileWriter(acce, true);
-            bw = new BufferedWriter(fw);
-            int ID = 0;
-            String nombre = "";
-            int precio = 0;
-            int cantidad = 0;
-
-            bw.flush();
-        } catch (Exception ex) {
-        }
-        try {
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginYRegister.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            fw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginYRegister.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
+        
     }//GEN-LAST:event_jButton3MouseClicked
 
 
     private void BotonREgistrarseRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarMouseClicked
-        String pass = PasswordtxtRegister.getText();
-        String Username = UsernametxtRegister.getText();
-        int edad = Integer.parseInt(EdadFormatedTxtRegister.getText());
-        boolean Encontrado = false;
-        int dinero;
-        dinero = (int) (Math.random() * (8000 - 1000) + 1000);
-
-        for (Usuarios u : adminU.getListaU()) {
-            if ((!Username.equals(u.getUsuario())) && (!pass.equals(u.getContraseña()))) {
-                Encontrado = true;
-            }
-        }
-
-        if (Encontrado == false) {
-            JOptionPane.showMessageDialog(this, "El Usuario");
-        } else {
-            try {
-                adminU.escribirArchivoR(Username, pass, edad);
-            } catch (IOException ex) {
-                Logger.getLogger(LoginYRegister.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            JOptionPane.showMessageDialog(this, "Usuario creado");
-
-            RegistroFrame.setVisible(false);
-            CompradorGui Cg = new CompradorGui();
-            Cg.pack();// aparece con el tamano de los botones
-            Cg.setLocationRelativeTo(this);//es para centrar la ventana emergente con la anterior
-            Cg.setVisible(true);
-        }
+     
     }//GEN-LAST:event_BotonREgistrarseRegistrarMouseClicked
 
     /**
@@ -456,6 +419,7 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JButton BotonREgistrarseRegistrar;
     private javax.swing.JButton BotonRegistrar;
     private javax.swing.JFormattedTextField EdadFormatedTxtRegister;
+    private javax.swing.JFrame FrameAdmin;
     private javax.swing.JTextField PasswordtxtRegister;
     private javax.swing.JPanel RegisterFrame;
     private javax.swing.JFrame RegistroFrame;
@@ -463,6 +427,7 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JTextField TextoUsername;
     private javax.swing.JTextField UsernametxtRegister;
     private javax.swing.JButton jButton1;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -476,9 +441,6 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField nombreTxtResgister;
     // End of variables declaration//GEN-END:variables
- /* ArrayList<Usuarios> usuarios = new ArrayList();
-    AdminUsuarios adminU = new AdminUsuarios("./Usuarios.txt");
-    AdminGui Ag = new AdminGui();
-    ArrayList <Usuarios> ing = new ArrayList();
-    AdminUsuarios Ingreso = new AdminUsuarios("./Ingreso");*/
+ ArrayList<Usuarios> usuarios = new ArrayList();
+
 }
