@@ -15,9 +15,9 @@ public class Usuarios {
     private String password;
     private String nombre;
     private int edad;
-    private boolean tipo;
+    private String tipo;
 
-    public Usuarios(String Username, String password, String nombre, int edad, boolean tipo) {
+    public Usuarios(String Username, String password, String nombre, int edad, String tipo) {
         this.Username = Username;
         this.password = password;
         this.nombre = nombre;
@@ -57,11 +57,11 @@ public class Usuarios {
         this.edad = edad;
     }
 
-    public boolean isTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(boolean tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
@@ -70,6 +70,4 @@ public class Usuarios {
         return "Usuarios{" + "Username=" + Username + ", password=" + password + ", nombre=" + nombre + ", edad=" + edad + ", tipo=" + tipo + '}';
     }
 
-    
-    
 }
