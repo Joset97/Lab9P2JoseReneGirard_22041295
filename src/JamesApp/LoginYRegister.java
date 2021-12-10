@@ -22,6 +22,8 @@ public class LoginYRegister extends javax.swing.JFrame {
      */
     public LoginYRegister() throws IOException {
         initComponents();
+        Db.actualizarARL();
+        usuarios = Db.getUs();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,7 +35,7 @@ public class LoginYRegister extends javax.swing.JFrame {
     private void initComponents() {
 
         RegistroFrame = new javax.swing.JFrame();
-        RegisterFrame = new javax.swing.JPanel();
+        RegisterFrames = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         nombreTxtResgister = new javax.swing.JTextField();
@@ -53,16 +55,16 @@ public class LoginYRegister extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        UsuarioAdminTxt = new javax.swing.JTextField();
+        NombreAdminTxt = new javax.swing.JTextField();
+        PasswordAdminTxt = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        BotonEliminarAdmin = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jTextField5 = new javax.swing.JTextField();
+        FormatedTxtAdminEdad = new javax.swing.JFormattedTextField();
+        jComboBoxTipoAdmin = new javax.swing.JComboBox<>();
         jFrame1 = new javax.swing.JFrame();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -97,6 +99,11 @@ public class LoginYRegister extends javax.swing.JFrame {
         BotonREgistrarseRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BotonREgistrarseRegistrarMouseClicked(evt);
+            }
+        });
+        BotonREgistrarseRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonREgistrarseRegistrarActionPerformed(evt);
             }
         });
 
@@ -162,14 +169,14 @@ public class LoginYRegister extends javax.swing.JFrame {
                 .addGap(29, 29, 29))
         );
 
-        javax.swing.GroupLayout RegisterFrameLayout = new javax.swing.GroupLayout(RegisterFrame);
-        RegisterFrame.setLayout(RegisterFrameLayout);
-        RegisterFrameLayout.setHorizontalGroup(
-            RegisterFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout RegisterFramesLayout = new javax.swing.GroupLayout(RegisterFrames);
+        RegisterFrames.setLayout(RegisterFramesLayout);
+        RegisterFramesLayout.setHorizontalGroup(
+            RegisterFramesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        RegisterFrameLayout.setVerticalGroup(
-            RegisterFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        RegisterFramesLayout.setVerticalGroup(
+            RegisterFramesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -181,7 +188,7 @@ public class LoginYRegister extends javax.swing.JFrame {
             .addGroup(RegistroFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(RegistroFrameLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(RegisterFrame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RegisterFrames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         RegistroFrameLayout.setVerticalGroup(
@@ -190,7 +197,7 @@ public class LoginYRegister extends javax.swing.JFrame {
             .addGroup(RegistroFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(RegistroFrameLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(RegisterFrame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RegisterFrames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -207,11 +214,11 @@ public class LoginYRegister extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Times New Roman", 3, 24)); // NOI18N
         jLabel15.setText("Interfaz de Administrador");
 
-        jButton2.setText("jButton2");
+        jButton2.setText("Modificar");
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Agregar");
 
-        jButton4.setText("jButton4");
+        BotonEliminarAdmin.setText("Eliminar");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -226,6 +233,13 @@ public class LoginYRegister extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        jComboBoxTipoAdmin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente", "Personal" }));
+        jComboBoxTipoAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoAdminActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -236,25 +250,14 @@ public class LoginYRegister extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addGap(0, 15, Short.MAX_VALUE)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(jLabel12))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(32, 32, 32)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jButton3)
-                                            .addComponent(jButton2)
-                                            .addComponent(jButton4))))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(PasswordAdminTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jFormattedTextField1)
+                                    .addComponent(NombreAdminTxt)
+                                    .addComponent(UsuarioAdminTxt, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(FormatedTxtAdminEdad)
+                                    .addComponent(jComboBoxTipoAdmin, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -262,9 +265,17 @@ public class LoginYRegister extends javax.swing.JFrame {
                                                 .addComponent(jLabel14))
                                             .addComponent(jLabel11)
                                             .addComponent(jLabel10)
-                                            .addComponent(jLabel13))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jTextField5))))
+                                            .addComponent(jLabel13)
+                                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jButton3)
+                                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                                    .addComponent(jLabel12)
+                                                    .addGap(41, 41, 41))
+                                                .addComponent(BotonEliminarAdmin))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(19, 19, 19)
+                                                .addComponent(jButton2)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -279,33 +290,33 @@ public class LoginYRegister extends javax.swing.JFrame {
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(UsuarioAdminTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(NombreAdminTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
                         .addComponent(jLabel12)
                         .addGap(11, 11, 11)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PasswordAdminTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(FormatedTxtAdminEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel14)
                         .addGap(7, 7, 7)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxTipoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BotonEliminarAdmin)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -342,6 +353,11 @@ public class LoginYRegister extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("¿No tienes una cuenta?");
@@ -350,6 +366,11 @@ public class LoginYRegister extends javax.swing.JFrame {
         BotonRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BotonRegistrarMouseClicked(evt);
+            }
+        });
+        BotonRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonRegistrarActionPerformed(evt);
             }
         });
 
@@ -441,7 +462,23 @@ public class LoginYRegister extends javax.swing.JFrame {
         String username = TextoUsername.getText();
         String pass = TextoPassWord.getText();
        
+        for (Usuarios usuario : usuarios) {
+            
+if(username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword()) ){
 
+    
+    if(usuario.getTipo().equals("Admin")){
+    
+    
+    
+    }
+    if(usuario.getTipo().equals("Cliente")){
+    
+    
+    }if(usuario.getTipo().equals())
+
+}
+        }
 
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -477,6 +514,39 @@ public class LoginYRegister extends javax.swing.JFrame {
     private void BotonREgistrarseRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarMouseClicked
      
     }//GEN-LAST:event_BotonREgistrarseRegistrarMouseClicked
+
+    private void jComboBoxTipoAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoAdminActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxTipoAdminActionPerformed
+
+    private void BotonREgistrarseRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarActionPerformed
+        // TODO add your handling code here:
+        
+        String username = UsernametxtRegister.getText();
+        String Nombre = nombreTxtResgister.getText();
+        String Password = PasswordtxtRegister.getText();
+        int edad = Integer.parseInt(EdadFormatedTxtRegister.getText());
+        String Tipo = "Cliente";         
+        
+        Db.Agregar(username, Password, Nombre, edad, Tipo);
+  
+        usuarios.add(new Usuarios(username, Password, Nombre, edad, Tipo));
+        
+        JOptionPane.showMessageDialog(this, "Cliente registrado");
+        
+        RegistroFrame.setVisible(false);
+        
+        this.setVisible(true);
+        
+    }//GEN-LAST:event_BotonREgistrarseRegistrarActionPerformed
+
+    private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonRegistrarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -519,21 +589,25 @@ public class LoginYRegister extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonEliminarAdmin;
     private javax.swing.JButton BotonREgistrarseRegistrar;
     private javax.swing.JButton BotonRegistrar;
     private javax.swing.JFormattedTextField EdadFormatedTxtRegister;
+    private javax.swing.JFormattedTextField FormatedTxtAdminEdad;
     private javax.swing.JFrame FrameAdmin;
+    private javax.swing.JTextField NombreAdminTxt;
+    private javax.swing.JTextField PasswordAdminTxt;
     private javax.swing.JTextField PasswordtxtRegister;
-    private javax.swing.JPanel RegisterFrame;
+    private javax.swing.JPanel RegisterFrames;
     private javax.swing.JFrame RegistroFrame;
     private javax.swing.JTextField TextoPassWord;
     private javax.swing.JTextField TextoUsername;
     private javax.swing.JTextField UsernametxtRegister;
+    private javax.swing.JTextField UsuarioAdminTxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JComboBox<String> jComboBoxTipoAdmin;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -555,12 +629,8 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField nombreTxtResgister;
     // End of variables declaration//GEN-END:variables
  ArrayList<Usuarios> usuarios = new ArrayList();
-
+UsuariosAdminJBDC Db = new UsuariosAdminJBDC();
 }
