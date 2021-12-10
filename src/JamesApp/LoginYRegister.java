@@ -25,6 +25,7 @@ public class LoginYRegister extends javax.swing.JFrame {
         Db.actualizarARL();
         usuarios = Db.getUs();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -461,23 +462,22 @@ public class LoginYRegister extends javax.swing.JFrame {
 
         String username = TextoUsername.getText();
         String pass = TextoPassWord.getText();
-       
+
         for (Usuarios usuario : usuarios) {
-            
-if(username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword()) ){
 
-    
-    if(usuario.getTipo().equals("Admin")){
-    
-    
-    
-    }
-    if(usuario.getTipo().equals("Cliente")){
-    
-    
-    }if(usuario.getTipo().equals())
+            if (username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword())) {
 
-}
+                if (usuario.getTipo().equals("Admin")) {
+
+                }
+                if (usuario.getTipo().equals("Cliente")) {
+
+                }
+                if (usuario.getTipo().equals("Personal")) {
+
+                }
+
+            }
         }
 
     }//GEN-LAST:event_jButton1MouseClicked
@@ -506,13 +506,13 @@ if(username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword()) 
     }//GEN-LAST:event_NombreTxtModificarAdminActionPerformed
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-       
-        
+
+
     }//GEN-LAST:event_jButton3MouseClicked
 
 
     private void BotonREgistrarseRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarMouseClicked
-     
+
     }//GEN-LAST:event_BotonREgistrarseRegistrarMouseClicked
 
     private void jComboBoxTipoAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoAdminActionPerformed
@@ -521,23 +521,23 @@ if(username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword()) 
 
     private void BotonREgistrarseRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarActionPerformed
         // TODO add your handling code here:
-        
+
         String username = UsernametxtRegister.getText();
         String Nombre = nombreTxtResgister.getText();
         String Password = PasswordtxtRegister.getText();
         int edad = Integer.parseInt(EdadFormatedTxtRegister.getText());
-        String Tipo = "Cliente";         
-        
+        String Tipo = "Cliente";
+
         Db.Agregar(username, Password, Nombre, edad, Tipo);
-  
+
         usuarios.add(new Usuarios(username, Password, Nombre, edad, Tipo));
-        
+
         JOptionPane.showMessageDialog(this, "Cliente registrado");
-        
+
         RegistroFrame.setVisible(false);
-        
+
         this.setVisible(true);
-        
+
     }//GEN-LAST:event_BotonREgistrarseRegistrarActionPerformed
 
     private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarActionPerformed
@@ -632,5 +632,5 @@ if(username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword()) 
     private javax.swing.JTextField nombreTxtResgister;
     // End of variables declaration//GEN-END:variables
  ArrayList<Usuarios> usuarios = new ArrayList();
-UsuariosAdminJBDC Db = new UsuariosAdminJBDC();
+    UsuariosAdminJBDC Db = new UsuariosAdminJBDC();
 }
