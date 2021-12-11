@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -56,11 +57,13 @@ public class UsuariosAdminJBDC {
 
     }
 
-    public void eliminar(JTable tabla) {
+    public void eliminar(JTextField tabla) {
 
+        String username=tabla.getText();
+        
         db.conectar();
         try {
-            db.query.execute("delete from Usuarios where" + tabla.isFocusOwner());
+            db.query.execute("delete from Usuarios where Usuario='" + username + "'" );
             db.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();

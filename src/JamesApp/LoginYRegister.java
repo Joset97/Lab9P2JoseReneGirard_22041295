@@ -94,7 +94,7 @@ public class LoginYRegister extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        TextAreaSoporte = new javax.swing.JTextArea();
+        TextAreaCliente = new javax.swing.JTextArea();
         TextMensajeSoporte = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -398,6 +398,11 @@ public class LoginYRegister extends javax.swing.JFrame {
         });
 
         jButton6.setText("Enviar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         TextAreaPersonal.setColumns(20);
         TextAreaPersonal.setRows(5);
@@ -408,6 +413,12 @@ public class LoginYRegister extends javax.swing.JFrame {
         TxtEdadPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtEdadPersonalActionPerformed(evt);
+            }
+        });
+
+        TextMensajePersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextMensajePersonalActionPerformed(evt);
             }
         });
 
@@ -524,11 +535,16 @@ public class LoginYRegister extends javax.swing.JFrame {
         jLabel22.setFont(new java.awt.Font("Times New Roman", 3, 36)); // NOI18N
         jLabel22.setText("Soporte de Cliente");
 
-        TextAreaSoporte.setColumns(20);
-        TextAreaSoporte.setRows(5);
-        jScrollPane3.setViewportView(TextAreaSoporte);
+        TextAreaCliente.setColumns(20);
+        TextAreaCliente.setRows(5);
+        jScrollPane3.setViewportView(TextAreaCliente);
 
         jButton7.setText("Enviar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Terminar");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -701,60 +717,44 @@ public class LoginYRegister extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-
+        
         String username = TextoUsername.getText();
         String pass = TextoPassWord.getText();
-
+        
         for (Usuarios usuario : usuarios) {
-
+            
             if (username.equals(usuario.getUsername()) && pass.equals(usuario.getPassword())) {
-
+                
                 if (usuario.getTipo().equals("Admin")) {
-
+                    
                     FrameAdmin.pack();
                     FrameAdmin.setLocationRelativeTo(this);
                     FrameAdmin.setVisible(true);
-
-                    DefaultTableModel Model = (DefaultTableModel) Tabla.getModel();
-                    Model.setRowCount(0);
-
-                    db.conectar();
-                    try {
-                        db.query.execute("select * from Usuarios");
-                        ResultSet rs = db.query.getResultSet();
-                        while (rs.next()) {
-
-                            String sername = rs.getString(1);
-                            String nombre = rs.getString(2);
-                            String password = rs.getString(3);
-                            int Edad = rs.getInt(4);
-                            String tipo = rs.getString(5);
-
-                            Object[] newrow = {sername, nombre, password, Edad, tipo};
-                            Model.addRow(newrow);
-                        }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                    db.desconectar();
-
+                    
+                   ActualizarTabla();
+                    
                     break;
                 }
                 if (usuario.getTipo().equals("Cliente")) {
-
+                    clienteAct = TextoUsername.getText();
                     InterfazCliente.pack();
                     InterfazCliente.setLocationRelativeTo(this);
                     InterfazCliente.setVisible(true);
+                           DefaultComboBoxModel modelo
+                            = (DefaultComboBoxModel) jComboBox1.getModel();
+                    modelo.removeAllElements();
 
+                    modelo.addElement(usuario);
+                    
                 }
                 if (usuario.getTipo().equals("Personal")) {
+                    personalAct = TextoUsername.getText();
                     InterfazPersonal.pack();
                     InterfazPersonal.setLocationRelativeTo(this);
                     InterfazPersonal.setVisible(true);
                     
-                   
                 }
-
+                
             }
         }
 
@@ -784,10 +784,10 @@ public class LoginYRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_NombreTxtModificarAdminActionPerformed
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-
+        
 
     }//GEN-LAST:event_jButton3MouseClicked
-
+    
 
     private void BotonREgistrarseRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonREgistrarseRegistrarMouseClicked
 
@@ -805,29 +805,29 @@ public class LoginYRegister extends javax.swing.JFrame {
         String Password = PasswordtxtRegister.getText();
         int edad = Integer.parseInt(EdadFormatedTxtRegister.getText());
         String Tipo = "Cliente";
-
+        
         boolean exist = false;
         for (Usuarios usuario : usuarios) {
-
+            
             if (username.equals(usuario.getUsername())) {
-
+                
                 JOptionPane.showMessageDialog(this, "El username ya existe");
                 exist = true;
-
+                
             } else {
                 exist = false;
             }
         }
-
+        
         if (exist == false) {
             Db.Agregar(username, Password, Nombre, edad, Tipo);
-
+            
             usuarios.add(new Usuarios(username, Password, Nombre, edad, Tipo));
             JOptionPane.showMessageDialog(this, "Cliente registrado");
             RegistroFrame.setVisible(false);
-
+                  ActualizarTabla();
             this.setVisible(true);
-
+      
         }
 
     }//GEN-LAST:event_BotonREgistrarseRegistrarActionPerformed
@@ -843,6 +843,8 @@ public class LoginYRegister extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
 
+         JOptionPane.showMessageDialog(InterfazPersonal, "Chat finalizado");
+        TextAreaCliente.setText(" ");
         InterfazCliente.setVisible(false);
 
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -855,16 +857,36 @@ public class LoginYRegister extends javax.swing.JFrame {
         String password = PasswordAdminTxt.getText();
         int edad = Integer.parseInt(FormatedTxtAdminEdad.getText());
         String tipo = ((String) jComboBoxTipoAdmin.getSelectedItem());
-
+         boolean exist = false;
+        for (Usuarios usuario : usuarios) {
+            
+            if (usern.equals(usuario.getUsername())) {
+                
+                JOptionPane.showMessageDialog(this, "El username ya existe");
+                exist = true;
+                
+            } else {
+                exist = false;
+            }
+        }
+        
+        if (exist == false) {
+  
         Db.Agregar(usern, password, nomb, edad, tipo);
-
+        
+        JOptionPane.showMessageDialog(FrameAdmin, "Se a agregado con exito");
+      ActualizarTabla();
+        }
+        
+      
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void BotonEliminarAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarAdminActionPerformed
         // TODO add your handling code here:
 
-        Db.eliminar(Tabla);
-
+        Db.eliminar(UsuarioAdminTxt);
+        JOptionPane.showMessageDialog(FrameAdmin, "Se ha eliminado con exito"); 
+      ActualizarTabla();
     }//GEN-LAST:event_BotonEliminarAdminActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -874,17 +896,15 @@ public class LoginYRegister extends javax.swing.JFrame {
         String nombre = ((Usuarios) (modelo.getSelectedItem())).getNombre();
         int edad = ((Usuarios) (modelo.getSelectedItem())).getEdad();
         String contra = ((Usuarios) (modelo.getSelectedItem())).getPassword();
-
+        
         TextNombrePersonal.setText(nombre);
         TxtUsuarioPersonal.setText(usuario);
         TxtEdadPersonal.setText(String.valueOf(edad));
         TextPasswordPersonal.setText(contra);
+        
+        TextAreaCliente.append(personalAct + " ha ingreado al chat\n");
+        
 
-        String personal = TextoUsername.getText();
-        
-        TextAreaPersonal.append(personal + " ha ingreado al chat\n");
-        
-        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void TxtEdadPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtEdadPersonalActionPerformed
@@ -896,8 +916,34 @@ public class LoginYRegister extends javax.swing.JFrame {
         
         JOptionPane.showMessageDialog(InterfazPersonal, "Chat finalizado");
         TextAreaPersonal.setText(" ");
-        
+        TextNombrePersonal.setText(" ");
+        TxtUsuarioPersonal.setText(" ");
+        TxtEdadPersonal.setText(String.valueOf(" "));
+        TextPasswordPersonal.setText(" ");
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        
+        TextAreaPersonal.append(TextMensajePersonal.getText() + "\n");
+        TextAreaCliente.append(personalAct + ":" + TextMensajePersonal.getText() + "\n");
+        TextMensajePersonal.setText(" ");
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void TextMensajePersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextMensajePersonalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextMensajePersonalActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        
+            TextAreaCliente.append(TextMensajeSoporte.getText() + "\n");
+        TextAreaPersonal.append(clienteAct + ":" + TextMensajeSoporte.getText() + "\n");
+        TextMensajeSoporte.setText(" ");
+        
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -954,8 +1000,8 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JPanel RegisterFrames;
     private javax.swing.JFrame RegistroFrame;
     private javax.swing.JTable Tabla;
+    private javax.swing.JTextArea TextAreaCliente;
     private javax.swing.JTextArea TextAreaPersonal;
-    private javax.swing.JTextArea TextAreaSoporte;
     private javax.swing.JTextField TextMensajePersonal;
     private javax.swing.JTextField TextMensajeSoporte;
     private javax.swing.JTextField TextNombrePersonal;
@@ -1011,4 +1057,34 @@ public class LoginYRegister extends javax.swing.JFrame {
  ArrayList<Usuarios> usuarios = new ArrayList();
     UsuariosAdminJBDC Db = new UsuariosAdminJBDC("./User.accdb");
     Dba db = new Dba("./User.accdb");
+    
+    String personalAct;
+    String clienteAct;
+    
+    
+    public void ActualizarTabla(){
+     DefaultTableModel Model = (DefaultTableModel) Tabla.getModel();
+                    Model.setRowCount(0);
+                    
+                    db.conectar();
+                    try {
+                        db.query.execute("select * from Usuarios");
+                        ResultSet rs = db.query.getResultSet();
+                        while (rs.next()) {
+                            
+                            String sername = rs.getString(1);
+                            String nombre = rs.getString(2);
+                            String password = rs.getString(3);
+                            int Edad = rs.getInt(4);
+                            String tipo = rs.getString(5);
+                            
+                            Object[] newrow = {sername, nombre, password, Edad, tipo};
+                            Model.addRow(newrow);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    db.desconectar();
+    
+    }
 }
