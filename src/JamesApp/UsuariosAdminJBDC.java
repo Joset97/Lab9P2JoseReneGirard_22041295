@@ -5,7 +5,7 @@
  */
 package JamesApp;
 
-import JDBC.Dba;
+import JBDC.Dba;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,11 +18,12 @@ import javax.swing.JTable;
  */
 public class UsuariosAdminJBDC {
 
-    Dba db = new Dba("./Usuarios.mdb");
+    Dba db;
     ArrayList<Usuarios> us;
 
-    public UsuariosAdminJBDC() {
+    public UsuariosAdminJBDC(String base) {
         us = new ArrayList();
+         db = new Dba(base);
     }
 
     public void Agregar(String Username, String password, String nombre, int edad, String tipo) {
@@ -31,7 +32,7 @@ public class UsuariosAdminJBDC {
         db.conectar();
         try {
 
-            db.query.execute("INSERT INTO User"
+            db.query.execute("INSERT INTO Usuarios"
                     + " (Usuario,Nombre,Password,Edad,Tipo)"
                     + " VALUES ('" + Username + "', '" + nombre + "', '" + password + "', '" + edad + "', '" + tipo + "')");
             db.commit();
@@ -46,7 +47,7 @@ public class UsuariosAdminJBDC {
 
         db.conectar();
         try {
-            db.query.execute("update User set  Usuario=" + Username + ",Nombre=" + nombre + " Password=" + password + ", Edad=" + edad + ") where" + tabla.isBackgroundSet());
+            db.query.execute("update Usuarios set  Usuario=" + Username + ",Nombre=" + nombre + " Password=" + password + ", Edad=" + edad + ") where" + tabla.isBackgroundSet());
             db.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -59,7 +60,7 @@ public class UsuariosAdminJBDC {
 
         db.conectar();
         try {
-            db.query.execute("delete from User where" + tabla.isBackgroundSet());
+            db.query.execute("delete from Usuarios where" + tabla.isBackgroundSet());
             db.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -72,7 +73,7 @@ public class UsuariosAdminJBDC {
         us= new ArrayList();
              db.conectar();
          try {
-         db.query.execute("select * from User");
+         db.query.execute("select * from Usuarios");
          ResultSet rs = db.query.getResultSet();           
          while (rs.next()) {
              

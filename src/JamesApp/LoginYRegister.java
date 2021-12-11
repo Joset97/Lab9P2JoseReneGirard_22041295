@@ -683,14 +683,20 @@ public class LoginYRegister extends javax.swing.JFrame {
                     FrameAdmin.pack();
                     FrameAdmin.setLocationRelativeTo(this);
                     FrameAdmin.setVisible(true);
-                    
+
                     break;
                 }
                 if (usuario.getTipo().equals("Cliente")) {
 
+                    InterfazCliente.pack();
+                    InterfazCliente.setLocationRelativeTo(this);
+                    InterfazCliente.setVisible(true);
+
                 }
                 if (usuario.getTipo().equals("Personal")) {
-
+                    InterfazPersonal.pack();
+                    InterfazPersonal.setLocationRelativeTo(this);
+                    InterfazPersonal.setVisible(true);
                 }
 
             }
@@ -766,10 +772,9 @@ public class LoginYRegister extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        
-        
-        InterfazCliente.setVisible(fasle);
-        
+
+        InterfazCliente.setVisible(false);
+
     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
@@ -882,5 +887,5 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JTextField nombreTxtResgister;
     // End of variables declaration//GEN-END:variables
  ArrayList<Usuarios> usuarios = new ArrayList();
-    UsuariosAdminJBDC Db = new UsuariosAdminJBDC();
+    UsuariosAdminJBDC Db = new UsuariosAdminJBDC("./User.accdb");
 }
