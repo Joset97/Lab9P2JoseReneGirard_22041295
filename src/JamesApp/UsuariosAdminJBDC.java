@@ -60,7 +60,7 @@ public class UsuariosAdminJBDC {
 
         db.conectar();
         try {
-            db.query.execute("delete from Usuarios where" + tabla.isBackgroundSet());
+            db.query.execute("delete from Usuarios where" + tabla.isFocusOwner());
             db.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();

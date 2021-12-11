@@ -5,15 +5,20 @@
  */
 package JamesApp;
 
+import JBDC.Dba;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class LoginYRegister extends javax.swing.JFrame {
 
@@ -63,7 +68,7 @@ public class LoginYRegister extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         BotonEliminarAdmin = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Tabla = new javax.swing.JTable();
         FormatedTxtAdminEdad = new javax.swing.JFormattedTextField();
         jComboBoxTipoAdmin = new javax.swing.JComboBox<>();
         InterfazPersonal = new javax.swing.JFrame();
@@ -244,10 +249,20 @@ public class LoginYRegister extends javax.swing.JFrame {
         jButton2.setText("Modificar");
 
         jButton3.setText("Agregar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         BotonEliminarAdmin.setText("Eliminar");
+        BotonEliminarAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEliminarAdminActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -258,7 +273,7 @@ public class LoginYRegister extends javax.swing.JFrame {
                 "Usuario", "Nombre", "Password", "Edad", "Tipo"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(Tabla);
 
         jComboBoxTipoAdmin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente", "Personal" }));
         jComboBoxTipoAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -369,8 +384,18 @@ public class LoginYRegister extends javax.swing.JFrame {
         jLabel20.setText("Password");
 
         jButton4.setText("Chat");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Terminar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Enviar");
 
@@ -379,6 +404,12 @@ public class LoginYRegister extends javax.swing.JFrame {
         jScrollPane2.setViewportView(TextAreaPersonal);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        TxtEdadPersonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtEdadPersonalActionPerformed(evt);
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Times New Roman", 3, 24)); // NOI18N
         jLabel21.setText("Interfaz Personal");
@@ -684,6 +715,29 @@ public class LoginYRegister extends javax.swing.JFrame {
                     FrameAdmin.setLocationRelativeTo(this);
                     FrameAdmin.setVisible(true);
 
+                    DefaultTableModel Model = (DefaultTableModel) Tabla.getModel();
+                    Model.setRowCount(0);
+
+                    db.conectar();
+                    try {
+                        db.query.execute("select * from Usuarios");
+                        ResultSet rs = db.query.getResultSet();
+                        while (rs.next()) {
+
+                            String sername = rs.getString(1);
+                            String nombre = rs.getString(2);
+                            String password = rs.getString(3);
+                            int Edad = rs.getInt(4);
+                            String tipo = rs.getString(5);
+
+                            Object[] newrow = {sername, nombre, password, Edad, tipo};
+                            Model.addRow(newrow);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    db.desconectar();
+
                     break;
                 }
                 if (usuario.getTipo().equals("Cliente")) {
@@ -697,6 +751,8 @@ public class LoginYRegister extends javax.swing.JFrame {
                     InterfazPersonal.pack();
                     InterfazPersonal.setLocationRelativeTo(this);
                     InterfazPersonal.setVisible(true);
+                    
+                   
                 }
 
             }
@@ -750,15 +806,29 @@ public class LoginYRegister extends javax.swing.JFrame {
         int edad = Integer.parseInt(EdadFormatedTxtRegister.getText());
         String Tipo = "Cliente";
 
-        Db.Agregar(username, Password, Nombre, edad, Tipo);
+        boolean exist = false;
+        for (Usuarios usuario : usuarios) {
 
-        usuarios.add(new Usuarios(username, Password, Nombre, edad, Tipo));
+            if (username.equals(usuario.getUsername())) {
 
-        JOptionPane.showMessageDialog(this, "Cliente registrado");
+                JOptionPane.showMessageDialog(this, "El username ya existe");
+                exist = true;
 
-        RegistroFrame.setVisible(false);
+            } else {
+                exist = false;
+            }
+        }
 
-        this.setVisible(true);
+        if (exist == false) {
+            Db.Agregar(username, Password, Nombre, edad, Tipo);
+
+            usuarios.add(new Usuarios(username, Password, Nombre, edad, Tipo));
+            JOptionPane.showMessageDialog(this, "Cliente registrado");
+            RegistroFrame.setVisible(false);
+
+            this.setVisible(true);
+
+        }
 
     }//GEN-LAST:event_BotonREgistrarseRegistrarActionPerformed
 
@@ -776,6 +846,58 @@ public class LoginYRegister extends javax.swing.JFrame {
         InterfazCliente.setVisible(false);
 
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+
+        String usern = UsuarioAdminTxt.getText();
+        String nomb = NombreAdminTxt.getText();
+        String password = PasswordAdminTxt.getText();
+        int edad = Integer.parseInt(FormatedTxtAdminEdad.getText());
+        String tipo = ((String) jComboBoxTipoAdmin.getSelectedItem());
+
+        Db.Agregar(usern, password, nomb, edad, tipo);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void BotonEliminarAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEliminarAdminActionPerformed
+        // TODO add your handling code here:
+
+        Db.eliminar(Tabla);
+
+    }//GEN-LAST:event_BotonEliminarAdminActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) jComboBox1.getModel();
+        String usuario = ((Usuarios) (modelo.getSelectedItem())).getUsername();
+        String nombre = ((Usuarios) (modelo.getSelectedItem())).getNombre();
+        int edad = ((Usuarios) (modelo.getSelectedItem())).getEdad();
+        String contra = ((Usuarios) (modelo.getSelectedItem())).getPassword();
+
+        TextNombrePersonal.setText(nombre);
+        TxtUsuarioPersonal.setText(usuario);
+        TxtEdadPersonal.setText(String.valueOf(edad));
+        TextPasswordPersonal.setText(contra);
+
+        String personal = TextoUsername.getText();
+        
+        TextAreaPersonal.append(personal + " ha ingreado al chat\n");
+        
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void TxtEdadPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtEdadPersonalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtEdadPersonalActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        
+        JOptionPane.showMessageDialog(InterfazPersonal, "Chat finalizado");
+        TextAreaPersonal.setText(" ");
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -831,6 +953,7 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JTextField PasswordtxtRegister;
     private javax.swing.JPanel RegisterFrames;
     private javax.swing.JFrame RegistroFrame;
+    private javax.swing.JTable Tabla;
     private javax.swing.JTextArea TextAreaPersonal;
     private javax.swing.JTextArea TextAreaSoporte;
     private javax.swing.JTextField TextMensajePersonal;
@@ -883,9 +1006,9 @@ public class LoginYRegister extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField nombreTxtResgister;
     // End of variables declaration//GEN-END:variables
  ArrayList<Usuarios> usuarios = new ArrayList();
     UsuariosAdminJBDC Db = new UsuariosAdminJBDC("./User.accdb");
+    Dba db = new Dba("./User.accdb");
 }
